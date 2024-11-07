@@ -13,7 +13,12 @@ public class AttributesManager : MonoBehaviour
  
     public void TakeDamage(int hp)
     {
-        heath -= hp - (hp * amor/100);
+        //heath -= hp - (hp * amor/100);
+        heath -= hp;
+        Vector3 rand = new Vector3(Random.Range(0, 0.25f),
+                                   Random.Range(0, 0.25f),
+                                   Random.Range(0, 0.25f));
+        DamagePopupGenerator.current.CreatePopup(transform.position + rand, hp.ToString(), Color.yellow);
     }
 
     public void DealDamage(GameObject target)
@@ -25,7 +30,7 @@ public class AttributesManager : MonoBehaviour
             if (Random.Range(0f, 1f) < criticalChange)
             {
                 totalDamage *= criticalDamage;
-                //atm.TakeDamage();
+                atm.TakeDamage((int)totalDamage);
             }
         }
     }

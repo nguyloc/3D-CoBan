@@ -16,7 +16,7 @@ public class DamageTester : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.I))
         {
             var x = player_atm.transform.position;
-            DamagePopupGenerator.current.CreatePopup(x,Random.Range(0, 100).ToString());
+            DamagePopupGenerator.current.CreatePopup(x,Random.Range(0, 1000).ToString(), Color.yellow);
         }
     }
 }
