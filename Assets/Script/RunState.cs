@@ -3,48 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class WalkState : StateMachineBehaviour
+public class RunState : StateMachineBehaviour
 {
-    float time;
-    List<Transform> waypoints = new List<Transform>();
-    
     NavMeshAgent agent;
+    Transform player;
+    
     
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        time = 0;
+        // tim player
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        
+        // tim NavMeshAgent
         agent = animator.gameObject.transform.parent.GetComponent<NavMeshAgent>();
-        
-        
-        GameObject gameObject = GameObject.FindGameObjectWithTag("WayPoints");
-        
-        foreach (Transform tran in gameObject.transform)
-        {
-            waypoints.Add(tran);
-        } 
-            agent.SetDestination(
-                waypoints[Random.Range(0, waypoints.Count)].position); // Randomly select a waypoint to go to
+        agent.speed = 2f;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        time += Time.deltaTime;
-        if (time > 10 )
-        {
-            animator.SetBool("isPatrolling", false);
-        }
-        if (agent.remainingDistance <= agent.stoppingDistance)
-        {
-            agent.SetDestination(waypoints[Random.Range(0, waypoints.Count)].position); // Randomly select a waypoint to go to
-        }
+        // dich den la player
+        agent.SetDestination(player.position);
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        agent.SetDestination (agent.transform.position);
+       // roi trang thai run, quay ve luoi
+       agent.SetDestination(animator.transform.position);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

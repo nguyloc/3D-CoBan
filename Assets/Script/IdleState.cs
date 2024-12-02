@@ -5,10 +5,17 @@ using UnityEngine;
 public class IdleState : StateMachineBehaviour
 {
     float time;
+
+    Transform player; // nguoi choi
+
+    private float chaseRange = 8; // khoang cach de bat dau duoi theo nguoi choi
+    
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         time = 0;
+        //tim player dua va tag
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -19,6 +26,13 @@ public class IdleState : StateMachineBehaviour
         {
             animator.SetBool("isPatrolling", true);
         }    
+        
+        // Kiem tra khoang cach giua player va enemy
+        float distance = Vector3.Distance(player.position, animator.transform.position);
+        if (distance <= chaseRange) // neu 2 dua gan nhau se bat dau truy duoi
+        {
+            animator.SetBool("isChasing", true);
+        }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
